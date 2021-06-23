@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/ujunglim/text_editor/static/css/main.9d5b29c0.chunk.css",
+    "main.js": "/ujunglim/text_editor/static/js/main.3ad00bed.chunk.js",
+    "main.js.map": "/ujunglim/text_editor/static/js/main.3ad00bed.chunk.js.map",
+    "runtime-main.js": "/ujunglim/text_editor/static/js/runtime-main.d74d27f9.js",
+    "runtime-main.js.map": "/ujunglim/text_editor/static/js/runtime-main.d74d27f9.js.map",
+    "static/js/2.ecf41f68.chunk.js": "/ujunglim/text_editor/static/js/2.ecf41f68.chunk.js",
+    "static/js/2.ecf41f68.chunk.js.map": "/ujunglim/text_editor/static/js/2.ecf41f68.chunk.js.map",
+    "static/js/3.1016e5bf.chunk.js": "/ujunglim/text_editor/static/js/3.1016e5bf.chunk.js",
+    "static/js/3.1016e5bf.chunk.js.map": "/ujunglim/text_editor/static/js/3.1016e5bf.chunk.js.map",
+    "index.html": "/ujunglim/text_editor/index.html",
+    "static/css/main.9d5b29c0.chunk.css.map": "/ujunglim/text_editor/static/css/main.9d5b29c0.chunk.css.map",
+    "static/js/2.ecf41f68.chunk.js.LICENSE.txt": "/ujunglim/text_editor/static/js/2.ecf41f68.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/ujunglim/text_editor/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d74d27f9.js",
+    "static/js/2.ecf41f68.chunk.js",
+    "static/css/main.9d5b29c0.chunk.css",
+    "static/js/main.3ad00bed.chunk.js"
+  ]
+}
