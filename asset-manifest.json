@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.js": "/ujunglim/text_editor/static/js/main.a14cfc1d.chunk.js",
-    "main.js.map": "/ujunglim/text_editor/static/js/main.a14cfc1d.chunk.js.map",
-    "runtime-main.js": "/ujunglim/text_editor/static/js/runtime-main.3f39461a.js",
-    "runtime-main.js.map": "/ujunglim/text_editor/static/js/runtime-main.3f39461a.js.map",
-    "static/js/2.c95c6e8a.chunk.js": "/ujunglim/text_editor/static/js/2.c95c6e8a.chunk.js",
-    "static/js/2.c95c6e8a.chunk.js.map": "/ujunglim/text_editor/static/js/2.c95c6e8a.chunk.js.map",
-    "index.html": "/ujunglim/text_editor/index.html",
-    "static/js/2.c95c6e8a.chunk.js.LICENSE.txt": "/ujunglim/text_editor/static/js/2.c95c6e8a.chunk.js.LICENSE.txt"
+    "main.js": "/text_editor/static/js/main.a14cfc1d.chunk.js",
+    "main.js.map": "/text_editor/static/js/main.a14cfc1d.chunk.js.map",
+    "runtime-main.js": "/text_editor/static/js/runtime-main.f293cc8d.js",
+    "runtime-main.js.map": "/text_editor/static/js/runtime-main.f293cc8d.js.map",
+    "static/js/2.c95c6e8a.chunk.js": "/text_editor/static/js/2.c95c6e8a.chunk.js",
+    "static/js/2.c95c6e8a.chunk.js.map": "/text_editor/static/js/2.c95c6e8a.chunk.js.map",
+    "index.html": "/text_editor/index.html",
+    "static/js/2.c95c6e8a.chunk.js.LICENSE.txt": "/text_editor/static/js/2.c95c6e8a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.3f39461a.js",
+    "static/js/runtime-main.f293cc8d.js",
     "static/js/2.c95c6e8a.chunk.js",
     "static/js/main.a14cfc1d.chunk.js"
   ]
