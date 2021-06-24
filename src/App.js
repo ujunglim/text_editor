@@ -1,64 +1,62 @@
+import { useEffect, useState, useRef } from 'react';
+import {Editor, EditorState, RichUtils} from 'draft-js';
 import { ImageOutlined } from '@material-ui/icons';
-import { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
-export default function App() {
+function MyEditor() {
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const editor = useRef(null);
 
-  const handleBold = () => {
-    // get user's selection
-    let selObj = window.getSelection();
-
-    if(selObj.type === 'Range') {
-      // create <b> dom
-      const boldTextDOM = document.createElement('b');
-      // get str of selection, set as <b> html
-      boldTextDOM.innerHTML = selObj.toString();
-
-      const range = selObj.getRangeAt(0);
-      range.deleteContents(); // Deletes selected text
-      range.insertNode(boldTextDOM);
-    }
+  function focusEditor() {
+    editor.current.focus();
   }
 
-  const handleImage = (event) => {
-    const selObj = window.getSelection();
+  useEffect(() => {
+    focusEditor()
+  }, []);
 
-    // Caret, Range are ok
-    if(selObj.type !== 'None') {
-      const {target: {files}} = event;
-      const theFile = files[0];
-  
-      const reader = new FileReader();
-      reader.onloadend = (finishedEvent) => {
-        const {currentTarget:{result}} = finishedEvent;
-        document.getElementById("image_file").value = null;
-        //============
-        const imgDOM = document.createElement('img');  // create <img> dom
-        imgDOM.src = result; // give file url as src
+  function handleKeyCommand(command, editorState) {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
 
-        const range = selObj.getRangeAt(0);
-        range.deleteContents(); 
-        range.insertNode(imgDOM);
-        //============
-      }
-      reader.readAsDataURL(theFile);
+    if (newState) {
+      setEditorState(newState);
+      return 'handled';
     }
+    return 'not-handled';
   }
 
+  const onBoldClick = ()=> {
+    setEditorState(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
+  }
 
   return (
     <>
-    <GlobalStyle />
-      <h1>Yujung's Text Editor</h1>
-      <button onClick={handleBold}>Bold</button>
-      <input id="image_file" type="file" accept="image/*" style={{display: "none"}} onChange={handleImage}/>
-      <label htmlFor="image_file" style={{cursor: "pointer"}}>
-        <ImageOutlined />
-      </label>
+      <button onClick={onBoldClick}>Bold</button>
 
-      <SpanBlock>
-        <Span contentEditable={true} />
-      </SpanBlock>
+      <div onClick={focusEditor} style={styles.editor}>
+        <Editor
+          ref={editor}
+          editorState={editorState}
+          onChange={setEditorState}
+          handleKeyCommand={handleKeyCommand}
+        />
+      </div>
+    </>
+  );
+}
+
+const styles = {
+  editor: {
+    border: '1px solid gray',
+    minHeight: '6em'
+  }
+};
+
+export default function App() {
+  return (
+    <>
+      <h1>Yujung Text Editor</h1>
+      <MyEditor />
     </>
   );
 }
@@ -90,10 +88,18 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const SpanBlock = styled.div`
+const Content = styled.div`
+  background-color: lightblue;
+`;
+
+const ContentBlock = styled.div`
   width: 100%;
   height: 100%;
-  background-color: coral;
+  background-color: pink;
+  margin-bottom: 1em;
+
+  display: flex;
+  align-items: center;
 `;
 
 const Span = styled.span`
@@ -101,7 +107,9 @@ const Span = styled.span`
   cursor: text;
   width: 100%;
   height: 100%;
-  background-color: pink;
   display: block;
+  /* display: flex;
+  flex-direction: column; */
+  outline: none;
 `;
 
