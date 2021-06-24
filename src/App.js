@@ -77,40 +77,47 @@ export default function App() {
   };
 
   return (
-    <AppContainer>
+    <div>
       <GlobalStyle />
-      <h1 style={{marginBottom:"3rem"}}>Yujung Text Editor</h1>
-      <Title type="text" placeholder="Write title at here" autoFocus />
+      <Header>
+        <h1>Text Editor</h1>
+        <SubmitBTN>Submit</SubmitBTN>
+      </Header>
 
-      <ToolBar>
-        <ToolBTN onClick={() => toggleStyle("BOLD")}>
-          <FormatBold />
-        </ToolBTN>
-        <ToolBTN onClick={() => toggleStyle("ITALIC")}>
-          <FormatItalic />
-        </ToolBTN>
+      <MainBox>
+        <Title type="text" placeholder="Write title at here" autoFocus />
+        <ToolBar>
+          <ToolBTN onClick={() => toggleStyle("BOLD")}>
+            <FormatBold />
+          </ToolBTN>
+          <ToolBTN onClick={() => toggleStyle("ITALIC")}>
+            <FormatItalic />
+          </ToolBTN>
 
-        <input id="image_file" type="file" accept="image/*" onChange={addImage} style={{display:"none"}} />
-        <ToolBTN>
-          <label htmlFor="image_file">
-            <ImageOutlined />
-          </label>
-        </ToolBTN>
+          <input id="image_file" type="file" accept="image/*" onChange={addImage} style={{display:"none"}} />
+          <ToolBTN>
+            <label htmlFor="image_file">
+              <ImageOutlined />
+            </label>
+          </ToolBTN>
 
-        <ToolBTN>
-          <Attachment />
-        </ToolBTN>
-        
-      </ToolBar>
+          <ToolBTN>
+            <Attachment />
+          </ToolBTN>
+          
+        </ToolBar>
+
+        <Editor
+          blockRendererFn={BlockRenderer}
+          handleKeyCommand={handleKeyCommand}
+          editorState={editorState}
+          onChange={setEditorState}
+          placeholder="Enter some text..."
+        />
+      </MainBox>
       
-      <Editor
-        blockRendererFn={BlockRenderer}
-        handleKeyCommand={handleKeyCommand}
-        editorState={editorState}
-        onChange={setEditorState}
-        placeholder="Enter some text..."
-      />
-    </AppContainer>
+      
+    </div>
   );
 }
 
@@ -140,20 +147,44 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const AppContainer = styled.div`
-  /* background: pink;  */
+const Header = styled.header`
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    
+    position: fixed;
+    top: 0;
+    /* padding: 0 10em; */
+    width: 100%;
+    height: 60px;
+    border: 1px solid lightgrey;
+    border-top: none;
+    background: white;
+`;
+
+const MainBox = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 47px auto 0;
+  margin: 60px auto 0;
   width: 660px;
 `;
 
+const SubmitBTN = styled.button`
+  color: white;
+  background-color: #1DA1F2;
+  padding: 0.6rem 1rem;
+  border-radius: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+`;
+
 const Title = styled.input`
-  height: 50px;
-  font-size: 30px;
+  height: 30px;
+  font-size: 20px;
   outline: none;
   border: none;
-  margin: 1rem 0;
+  margin: 5rem 0 1rem 0;
 `;
 
 const ToolBar = styled.div`
@@ -162,6 +193,7 @@ const ToolBar = styled.div`
   padding: 5px 0;
   border-top: 1px solid lightgrey;
   border-bottom: 1px solid lightgrey;
+  margin-bottom: 1rem;
 `;
 
 const ToolBTN = styled.button`
