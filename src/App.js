@@ -3,8 +3,6 @@ import styled, { createGlobalStyle } from 'styled-components';
 import MyEditor from './MyEditor';
 
 export default function App() {
-  
-
   return (
     <>
       <GlobalStyle />
@@ -16,7 +14,6 @@ export default function App() {
       <MainBox>
         <MyEditor />
       </MainBox>
-
     </>
   );
 }

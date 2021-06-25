@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { Attachment, FormatBold, FormatItalic, ImageOutlined } from '@material-ui/icons';
 import FileBlock from './FileBlock';
 import { useLocalStorage } from './localStorage';
+import "draft-js/dist/Draft.css";
 
- // render component, define custom entity with component
+ // render组件, 自定义entity
  function BlockRenderer(contentBlock) {
   const type = contentBlock.getType();
   if (type === "atomic") {
@@ -16,7 +17,7 @@ import { useLocalStorage } from './localStorage';
   }
 }
 
-// create custom component
+// 自定义组件
 function Media(props) {
   const entity = props.contentState.getEntity(props.block.getEntityAt(0));
   const { src } = entity.getData();
@@ -27,14 +28,15 @@ function Media(props) {
     media = <ImageBlock src={src} />;
   } 
   else if (type === "file") {
-    media = <FileBlock />;
+    media = <FileBlock src={src}/>;
   }
   return media;
 }
 
 export default function MyEditor() {
   
-  const timeoutID = useRef(0)
+  const timeoutID = useRef(0)// 保存的时候不需要 rerender，所以用ref
+  const [title, setTitle] = useLocalStorage('Title', '');
   const [rawContent, setRawContent] = useLocalStorage('Content', null)
   const [editorState, setEditorState] = useState(() => {
     if (rawContent) {
@@ -46,18 +48,18 @@ export default function MyEditor() {
     }
   });
 
-  // 防抖 save
+  // 防抖保存
   useEffect(() => {
-    clearTimeout(timeoutID.current); // clear previous settimeout
+    clearTimeout(timeoutID.current); // 1秒以内操作的话清掉之前的 setTimeout
     timeoutID.current = setTimeout(() => {
       const content = editorState.getCurrentContent();
       setRawContent(convertToRaw(content))
       console.log('Document Saved!')
-    }, 2000);
+    }, 1000); // 没有操作1秒以后 自动保存
 
   }, [editorState])
 
-  // keyboard controll
+  // 键盘控制
   const handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
@@ -67,25 +69,25 @@ export default function MyEditor() {
     return "not-handled";
   };
 
-  // button controll
+  // 按钮控制
   const toggleStyle = (type) => {
     const newState = RichUtils.toggleInlineStyle(editorState, type);
     setEditorState(newState);
   };
 
   const addImage = (event) => {
-    // get img src
+    // 拿到图片的src
     const {target: { files }} = event;
     const theFile = files[0];
     const reader = new FileReader();
     reader.onloadend = (finishedEvent) => {
       const src = finishedEvent.currentTarget.result
-      // create entity
       addMedia("image", src)
     };
     reader.readAsDataURL(theFile);
   };
 
+  // 创建并插入entity
   const addMedia = (type, src) => {
     const entity = editorState
       .getCurrentContent()
@@ -100,7 +102,7 @@ export default function MyEditor() {
 
   return(
     <>
-      <Title type="text" placeholder="Write title at here" autoFocus />
+      <Title value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Write title at here" autoFocus />
       <ToolBar>
         <ToolBTN onClick={() => toggleStyle("BOLD")}>
           <FormatBold />
@@ -134,20 +136,6 @@ export default function MyEditor() {
 }
 
 //============= Styled Component =================
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 60px;
-  border: 1px solid lightgrey;
-  border-top: none;
-  background: white;
-`;
-
 const Title = styled.input`
   height: 30px;
   font-size: 20px;
@@ -156,25 +144,20 @@ const Title = styled.input`
   margin: 5rem 0 1rem 0;
 `;
 
-
 const ImageBlock = styled.img`
   width: 70%;
   height: auto;
 `;
 
-const MediaBlock = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 2rem 0;
-`;
-
 const ToolBar = styled.div`
-  /* background-color: coral; */
   display: flex;
   padding: 5px 0;
   border-top: 1px solid lightgrey;
   border-bottom: 1px solid lightgrey;
   margin-bottom: 1rem;
+  position: sticky;
+  top: 59px;
+  background-color: white;
 `;
 
 const ToolBTN = styled.button`

@@ -3,15 +3,18 @@ import { useState } from "react";
 export const useLocalStorage = (key, initialValue, isReset) => {
   const [storedValue, setStoredValue] = useState(() => {
     try {
-      // get previous storedValue from local storage by key
+      // 通过key拿之前存的数据
       const item = localStorage.getItem(key);
+      // 有数据
       if(item && !isReset) {
-        return JSON.parse(item)
+        return JSON.parse(item);
       }
       else {
         if(isReset) {
-          localStorage.removeItem(key)
+          // isReset是用来清楚localstorage上的数据
+          localStorage.removeItem(key);
         }
+        // 初始值有可能是函数
         return typeof initialValue === "function" ? initialValue() : initialValue
       }
     }
@@ -20,12 +23,12 @@ export const useLocalStorage = (key, initialValue, isReset) => {
       return typeof initialValue === "function" ? initialValue() : initialValue;
     }
   });
-
+  // 存数据
   const setValue = (value) => {
     try {
-      // save state
+      // 改state
       setStoredValue(value);
-      // save localstorage
+      // 数据存到localStorage
       localStorage.setItem(key, JSON.stringify(value))
     }
     catch (error) {

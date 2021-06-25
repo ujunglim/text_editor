@@ -4,15 +4,16 @@ import { UploadOutlined } from "@ant-design/icons";
 import { useState } from 'react';
 
 export default function FileBlock() {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState();
 
+  // 清理文件
   const onRemove = (file) => {
     setFile(null);
   };
 
   const beforeUpload = (file) => {
     setFile(file);
-    return false; // Don't upload now
+    return false; // 不要现在上传
   };
 
   return (
