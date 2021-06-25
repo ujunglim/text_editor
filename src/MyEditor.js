@@ -1,5 +1,5 @@
-import { AtomicBlockUtils, Editor, EditorState, RichUtils } from 'draft-js';
-import React from 'react';
+import { AtomicBlockUtils, convertFromRaw, convertToRaw, Editor, EditorState, RichUtils } from 'draft-js';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Attachment, FormatBold, FormatItalic, ImageOutlined } from '@material-ui/icons';
 import FileBlock from './FileBlock';
@@ -34,8 +34,28 @@ function Media(props) {
 
 export default function MyEditor() {
   
-  const [editorState, setEditorState] = useLocalStorage('EditorState', () =>
-  EditorState.createEmpty(), true);
+  const timeoutID = useRef(0)
+  const [rawContent, setRawContent] = useLocalStorage('Content', null)
+  const [editorState, setEditorState] = useState(() => {
+    if (rawContent) {
+      const content = convertFromRaw(rawContent)
+      return EditorState.createWithContent(content);
+    }
+    else {
+      return EditorState.createEmpty();
+    }
+  });
+
+  // 防抖 save
+  useEffect(() => {
+    clearTimeout(timeoutID.current); // clear previous settimeout
+    timeoutID.current = setTimeout(() => {
+      const content = editorState.getCurrentContent();
+      setRawContent(convertToRaw(content))
+      console.log('Document Saved!')
+    }, 2000);
+
+  }, [editorState])
 
   // keyboard controll
   const handleKeyCommand = (command, editorState) => {
@@ -78,12 +98,9 @@ export default function MyEditor() {
     setEditorState(newEditorState);
   };
 
-  const onEditorChange = (newEditorState) => {
-    setEditorState(newEditorState);
-  }
-
   return(
     <>
+      <Title type="text" placeholder="Write title at here" autoFocus />
       <ToolBar>
         <ToolBTN onClick={() => toggleStyle("BOLD")}>
           <FormatBold />
@@ -109,7 +126,7 @@ export default function MyEditor() {
         blockRendererFn={BlockRenderer}
         handleKeyCommand={handleKeyCommand}
         editorState={editorState}
-        onChange={onEditorChange}
+        onChange={setEditorState}
         placeholder="Enter some text..."
       />
     </>
@@ -117,6 +134,29 @@ export default function MyEditor() {
 }
 
 //============= Styled Component =================
+const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  border: 1px solid lightgrey;
+  border-top: none;
+  background: white;
+`;
+
+const Title = styled.input`
+  height: 30px;
+  font-size: 20px;
+  outline: none;
+  border: none;
+  margin: 5rem 0 1rem 0;
+`;
+
+
 const ImageBlock = styled.img`
   width: 70%;
   height: auto;

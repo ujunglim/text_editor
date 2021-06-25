@@ -1,27 +1,21 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import AppRouter from './AppRouter';
 import MyEditor from './MyEditor';
 
 export default function App() {
-  const handleSubmit = () => {
-    console.log("submit")
-  }
+  
 
   return (
     <>
       <GlobalStyle />
       <Header>
         <h1>Text Editor</h1>
-        <SubmitBTN onClick={handleSubmit}>Submit</SubmitBTN>
+        <SubmitBTN>Submit</SubmitBTN>
       </Header>
-
+            
       <MainBox>
-        <Title type="text" placeholder="Write title at here" autoFocus />
         <MyEditor />
       </MainBox>
-
-      {/* <AppRouter /> */}
 
     </>
   );
@@ -67,13 +61,6 @@ const Header = styled.header`
   background: white;
 `;
 
-const MainBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 60px auto 0;
-  width: 660px;
-`;
-
 const SubmitBTN = styled.button`
   color: white;
   background-color: #1DA1F2;
@@ -85,13 +72,15 @@ const SubmitBTN = styled.button`
   outline: none;
 `;
 
-const Title = styled.input`
-  height: 30px;
-  font-size: 20px;
-  outline: none;
-  border: none;
-  margin: 5rem 0 1rem 0;
+const MainBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 60px auto 0;
+  width: 660px;
 `;
+
+
+
 
 
 
