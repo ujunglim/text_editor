@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import AppRouter from './AppRouter';
 import MyEditor from './MyEditor';
 
 export default function App() {
@@ -19,6 +20,9 @@ export default function App() {
         <Title type="text" placeholder="Write title at here" autoFocus />
         <MyEditor />
       </MainBox>
+
+      {/* <AppRouter /> */}
+
     </>
   );
 }

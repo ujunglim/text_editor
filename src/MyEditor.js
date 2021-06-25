@@ -2,7 +2,8 @@ import { AtomicBlockUtils, Editor, EditorState, RichUtils } from 'draft-js';
 import React from 'react';
 import styled from 'styled-components';
 import { Attachment, FormatBold, FormatItalic, ImageOutlined } from '@material-ui/icons';
-
+import FileBlock from './FileBlock';
+import { useLocalStorage } from './localStorage';
 
  // render component, define custom entity with component
  function BlockRenderer(contentBlock) {
@@ -23,22 +24,18 @@ function Media(props) {
   let media;
 
   if (type === "image") {
-    media = <Image src={src} />;
+    media = <ImageBlock src={src} />;
   } 
-  else if (type === "video") {
-    media = <Video src={src} />;
+  else if (type === "file") {
+    media = <FileBlock />;
   }
-
-  return(
-    <MediaBlock>
-      {media}
-    </MediaBlock>
-  );
+  return media;
 }
 
 export default function MyEditor() {
-  const [editorState, setEditorState] = React.useState(() =>
-  EditorState.createEmpty());
+  
+  const [editorState, setEditorState] = useLocalStorage('EditorState', () =>
+  EditorState.createEmpty(), true);
 
   // keyboard controll
   const handleKeyCommand = (command, editorState) => {
@@ -61,27 +58,29 @@ export default function MyEditor() {
     const {target: { files }} = event;
     const theFile = files[0];
     const reader = new FileReader();
-
     reader.onloadend = (finishedEvent) => {
+      const src = finishedEvent.currentTarget.result
       // create entity
-      const entity = editorState
-        .getCurrentContent()
-        .createEntity("image", "IMMUTABLE", {
-          src: finishedEvent.currentTarget.result
-      });
-
-      // insert entity to editorState
-      const newEditorState = AtomicBlockUtils.insertAtomicBlock(
-        editorState,
-        entity.getLastCreatedEntityKey(),
-        " "
-      );
-
-      // rerender editorState
-      setEditorState(newEditorState);
+      addMedia("image", src)
     };
     reader.readAsDataURL(theFile);
   };
+
+  const addMedia = (type, src) => {
+    const entity = editorState
+      .getCurrentContent()
+      .createEntity(type, "IMMUTABLE", { src });
+    const newEditorState = AtomicBlockUtils.insertAtomicBlock(
+      editorState,
+      entity.getLastCreatedEntityKey(),
+      " "
+    );
+    setEditorState(newEditorState);
+  };
+
+  const onEditorChange = (newEditorState) => {
+    setEditorState(newEditorState);
+  }
 
   return(
     <>
@@ -100,16 +99,17 @@ export default function MyEditor() {
           </label>
         </ToolBTN>
 
-        <ToolBTN>
+        <ToolBTN onClick={() => addMedia("file", null)}>
           <Attachment />
         </ToolBTN>
+
       </ToolBar>
 
       <Editor
         blockRendererFn={BlockRenderer}
         handleKeyCommand={handleKeyCommand}
         editorState={editorState}
-        onChange={setEditorState}
+        onChange={onEditorChange}
         placeholder="Enter some text..."
       />
     </>
@@ -117,13 +117,8 @@ export default function MyEditor() {
 }
 
 //============= Styled Component =================
-const Image = styled.img`
+const ImageBlock = styled.img`
   width: 70%;
-  height: auto;
-`;
-
-const Video = styled.video`
-  width: 100px;
   height: auto;
 `;
 
